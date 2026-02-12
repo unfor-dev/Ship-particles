@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "lil-gui": "^0.19.2",
-    "three": "^0.166.1",
-    "vercel": "^39.1.2"
+    "three": "^0.166.1"
   }
 }

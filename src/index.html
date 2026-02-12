@@ -4,14 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="./logo.jpg" type="icon">
+    <meta name="description" content="Interactive 3D ship particle flow field visualization built with Three.js and WebGL">
+    <meta property="og:title" content="Ship Particles">
+    <meta property="og:description" content="Interactive 3D ship particle flow field visualization">
+    <meta property="og:image" content="./logo.jpg">
+    <link rel="icon" href="./logo.jpg" type="image/jpeg">
     <title>Ship Particles</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <canvas class="webgl"></canvas>
-    <button id="musicButton">Music</button>
-    <audio id="backgroundMusic" src="./music.mp3" loop></audio>
+    <div id="loader">
+        <div class="loader-line"></div>
+    </div>
+
+    <!-- Vignette overlay -->
+    <div class="vignette"></div>
+
+    <!-- Overlay UI -->
+    <div class="overlay">
+        <div class="overlay-title">
+            <h1>Ship Particles</h1>
+            <div class="title-line"></div>
+            <p>Flow Field Visualization</p>
+        </div>
+        <div class="overlay-info">
+            <span>Drag to rotate &bull; Scroll to zoom</span>
+        </div>
+    </div>
+
+    <canvas class="webgl" aria-label="3D particle visualization"></canvas>
+    <button id="musicButton" aria-label="Toggle music playback">Music</button>
+    <audio id="backgroundMusic" src="./music.mp3" loop preload="none"></audio>
     <script type="module" src="./script.js"></script>
 </body>
 </html>

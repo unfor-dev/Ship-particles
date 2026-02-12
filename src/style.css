@@ -1,13 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&display=swap');
+
 *
 {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 html,
 body
 {
     overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
 }
 
 .webgl
@@ -17,21 +22,194 @@ body
     left: 0;
     outline: none;
 }
-#musicButton {
+
+/* Vignette — cinematic edge darkening */
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 50%,
+        rgba(0, 0, 0, 0.25) 75%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+}
+
+/* Loading screen — single line */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #0f1b3d 0%, #060608 100%);
+    z-index: 200;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-line {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    border-radius: 1px;
+}
+
+.loader-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: lineSlide 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes lineSlide {
+    0%   { left: -40%; }
+    100% { left: 100%; }
+}
+
+/* Overlay UI */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
     z-index: 10;
-    padding: 10px 16px;
-    border: 2px solid rgb(105, 105, 105);
-    background: transparent;
-    color: rgb(254, 254, 255);
-    font-size: 14px;
-    border-radius: 12px;
+}
+
+.overlay-title {
+    position: absolute;
+    top: 36px;
+    left: 40px;
+    opacity: 0;
+    animation: fadeInSlide 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+}
+
+.overlay-title h1 {
+    font-size: 24px;
+    font-weight: 200;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.title-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: lineExpand 0.8s ease 1.2s forwards;
+}
+
+.overlay-title p {
+    font-size: 10px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+}
+
+.overlay-info {
+    position: absolute;
+    bottom: 28px;
+    right: 32px;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.8s forwards;
+}
+
+.overlay-info span {
+    font-size: 10px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.2);
+    letter-spacing: 1.5px;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes lineExpand {
+    from {
+        opacity: 0;
+        width: 0;
+    }
+    to {
+        opacity: 1;
+        width: 40px;
+    }
+}
+
+/* Music button — glass pill */
+#musicButton {
+    position: fixed;
+    bottom: 24px;
+    left: 32px;
+    z-index: 20;
+    padding: 10px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: 28px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    animation: fadeIn 0.8s ease 2s forwards;
 }
 
 #musicButton:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.03);
+}
+
+/* lil-gui override — glass theme */
+.lil-gui {
+    --background-color: rgba(8, 5, 12, 0.8) !important;
+    --title-background-color: rgba(8, 5, 12, 0.9) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-radius: 0 0 0 8px !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
 }
